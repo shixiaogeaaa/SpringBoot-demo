@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.repair.mapper.CompleteOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.repair.entity.CompleteOrder" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+      <id column="order_id" property="orderId" jdbcType="INTEGER"/>
+      <result column="admin_id" property="adminId" jdbcType="INTEGER"/>
+      <result column="adminName" property="adminName" jdbcType="VARCHAR"/>
+      <result column="complete_time" property="completeTime" jdbcType="TIMESTAMP"/>
+      <result column="image_path" property="imagePath" jdbcType="VARCHAR"/>
+      <result column="problem" property="problem" jdbcType="LONGVARCHAR"/>
+      <result column="remark" property="remark" jdbcType="LONGVARCHAR"/>
+      <result column="class_id" property="classId" jdbcType="INTEGER"/>
+      <result column="className" property="className" jdbcType="INTEGER"/>
+      <result column="buildingName" property="buildingName" jdbcType="INTEGER"/>
+      <result column="computer_number" property="computerNumber" jdbcType="INTEGER"/>
+  </resultMap>
+  <select id="getCompleteOrderByKeyWord" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+            co.*,a.admin_name AS adminName,
+            c.class_name AS className,
+            b.building_name AS buildingName
+        FROM
+            complete_order AS co
+        LEFT JOIN class AS c ON c.class_id = co.class_id
+        LEFT JOIN building AS b ON b.building_id = co.building_id
+        LEFT JOIN administrator AS a ON a.admin_id = co.admin_id
+        WHERE
+            co.problem LIKE "%"#{keyWord}"%"
+        ORDER BY
+            co.complete_time DESC
+    </select>
+
+    <select id="getCompleteOrderCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM complete_order
+    </select>
+
+</mapper>
